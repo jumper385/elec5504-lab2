@@ -88,7 +88,7 @@ def question_20():
         e3_ripple_rms = calculate_ripple_rms(time, e3)
 
         print(e1_rms, e3_rms, e3_avg)
-        print(f"{label} - Ripple RMS Voltage: {e3_ripple_rms:.5f} V")
+        print()
 
         ai1 = data["AI1"]
         ai2 = data["AI2"]
