@@ -50,6 +50,46 @@ def question_49():
     if not HEADLESS_MODE:
         plt.show()
 
+def question_52():
+    filepath_list = [
+        ("dataset/q49 fa90.txt", "FA=90 Degrees"),
+        ("dataset/q52 fa120.txt", "FA=120 Degrees"),
+        ("dataset/q52 fa130.txt", "FA=130 Degrees"),
+        ("dataset/q52 fa165.txt", "FA=165 Degrees"),
+    ]
+
+    fig, ax = plt.subplots(2, len(filepath_list), sharex=True, sharey='row', figsize=figsize)
+
+    for filepath, label in filepath_list:
+        df = lvdac2pd(filepath)
+        time = df["Time"]
+        voltage = df["E3"]
+        current = df["I3"]
+
+        ax[0, filepath_list.index((filepath, label))].set_title(f"{label}")
+        ax[0, filepath_list.index((filepath, label))].plot(time, voltage, label="E3", color='black', linewidth=0.5)
+        ax[0, filepath_list.index((filepath, label))].set_ylabel("E3 (V)")
+        ax[0, filepath_list.index((filepath, label))].legend()
+        ax[0, filepath_list.index((filepath, label))].axhline(0, color='gray', lw=0.5, ls='--')
+
+        ax[1, filepath_list.index((filepath, label))].plot(time, current, label="I3", color='red', linewidth=0.5)
+        ax[1, filepath_list.index((filepath, label))].set_xlabel("Time (ms)")
+        ax[1, filepath_list.index((filepath, label))].set_ylabel("I3 (A)")
+        # ax[1, filepath_list.index((filepath, label))].set_ylim(0, 3)
+        ax[1, filepath_list.index((filepath, label))].legend()
+
+        # print average voltage and current
+        v_ave = calculate_average_voltage(time, voltage)
+        i_ave = calculate_average_voltage(time, current)
+        p_ave = v_ave * i_ave
+        print(f"{label}: Average Voltage = {v_ave:.5f} V, Average Current = {i_ave:.5f} A", f"Average Power = {p_ave:.5f} W")
+
+    fig.tight_layout()
+    plt.savefig(os.path.join(OUTPUT_DIR, "q52.png"), dpi=300)
+
+    if not HEADLESS_MODE:
+        plt.show() 
+
 def question_55():
     filepath = "dataset/table3.tsv"
     df = pd.read_csv(filepath, sep="\t")
@@ -103,6 +143,7 @@ def question_56():
 
 def main():
     question_49()
+    question_52()
     question_55()
     question_56()
 
